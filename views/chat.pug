@@ -1,0 +1,15 @@
+extends _layout
+
+block content
+  h1 ระบบแชท
+  hr
+  .bg-secondary.rounded.p-3.position-relative(style="height: 500px;")
+    #chatMessages
+    .position-absolute(style="bottom: 0.5rem; left: 0.5rem; right: 0.5rem;")
+      form(onsubmit="onSendMessage(event)")
+        .input-group
+          input.form-control(id="message" type="text" name="message" placeholder="ส่งข้อความแชท" autocomplete="off")
+          button.btn.btn-primary ส่งข้อความ
+
+block script
+  script(src="/chat.js")

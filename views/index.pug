@@ -1,0 +1,10 @@
+extends _layout
+
+block content
+  h1 อัพโหลด video
+    form#formUpload
+      input#inputUpload.form-control(type="file" accept="video/*" required)
+      button#buttonUpload.btn.btn-primary.mt-3 อัพโหลด
+    #progressUpload.progress.mt-3.d-none
+      #progressBarUpload.progress-bar.progress-bar-striped(style="margin-top:5px;width:0; ")
+    script(src='./upload.js')
