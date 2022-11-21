@@ -3,21 +3,28 @@ const inputUpload = document.getElementById("inputUpload");
 const progressUpload = document.getElementById("progressUpload");
 const progressBarUpload = document.getElementById("progressBarUpload");
 const buttonUpload  = document.getElementById("buttonUpload");
+const listUpload = document.getElementById("listUpload");
 const ws = new WebSocket("ws://localhost:3000/upload");
+let urls  = []
 
 ws.addEventListener("close", () => {
   alert("การเชื่อมต่อสูญหาย จะทำการโหลดหน้าเว็บใหม่อีกครั้ง");
   location.reload();
 });
 
+
 ws.addEventListener("message", ({ data }) => {
-  const { uploaded , resize , result } = JSON.parse(data);
+  const { uploaded, lastjob, url } = JSON.parse(data);
+
   if (uploaded) {
     progressBarUpload.classList.add("bg-warning");
     progressBarUpload.innerText = 'กำลังประมวลผลวิดีโอและปรับขนาด กรุณารอสักครู่'
   }
-  if(resize){
-    alert(result)
+  if(url){
+    urls.push(url)
+  }
+  if(lastjob){
+    // alert(result)
     inputUpload.value = ''
     progressBarUpload.innerText = 'อัพโหลดเสร็จสิ้น'
     progressBarUpload.classList.remove("bg-warning");
@@ -26,6 +33,13 @@ ws.addEventListener("message", ({ data }) => {
     progressBarUpload.classList.remove("progress-bar-striped");
     buttonUpload.classList.remove("disabled");
     inputUpload.disabled = false
+
+    for(const url of urls){
+      const li = document.createElement('li')
+      li.innerText = url
+      listUpload.append(li)
+    }
+
     setTimeout(() => {
       progressUpload.classList.add("d-none");
     }, 3000);
@@ -44,6 +58,8 @@ formUpload.addEventListener("submit", () => {
   buttonUpload.classList.add("disabled");
   inputUpload.disabled = true
 
+  listUpload.innerHTML = ''
+  utls = []
 
   const uploadInterval = setInterval(() => {
     console.log(
